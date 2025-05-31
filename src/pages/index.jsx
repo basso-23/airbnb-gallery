@@ -18,6 +18,7 @@ const Home = () => {
           name: item.name,
           caption: item.caption,
           price: item.price,
+          link: item.link,
           documentId: item.documentId,
         }));
 
@@ -61,18 +62,21 @@ const Home = () => {
         <p className=" text-center pt-16 text-[15px]">Cargando airbnbs...</p>
       )}
 
-      <div className="content-container">
-        {airbnbs.map((item, index) => (
-          <Card
-            name={item.name}
-            caption={item.caption}
-            price={item.price}
-            images={item.images}
-            id={item.documentId}
-            key={item.documentId}
-          />
-        ))}
-      </div>
+      {!loading && (
+        <div className="content-container">
+          {airbnbs.map((item, index) => (
+            <Card
+              name={item.name}
+              caption={item.caption}
+              price={item.price}
+              images={item.images}
+              link={item.link}
+              id={item.documentId}
+              key={item.documentId}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

@@ -1,35 +1,102 @@
 import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
+import { GoHeartFill } from "react-icons/go";
 
-const Card = ({ name, caption, price, images, id }) => {
+const Card = ({ name, caption, price, images, link, id }) => {
+  const [isLiked, setIsLiked] = useState(false);
+
+  // Obtener likes guardados en localstorage
+  useEffect(() => {
+    const likedItems = JSON.parse(localStorage.getItem("likedItems")) || [];
+    setIsLiked(likedItems.includes(id));
+  }, [id]);
+
+  const sendLike = async (id) => {
+    try {
+      const storedLikes = JSON.parse(localStorage.getItem("likedItems")) || [];
+
+      let newLikes;
+      let updatedLikes;
+      let likedNow;
+
+      if (storedLikes.includes(id)) {
+        // Si ya está en localStorage, restar 1 y quitar el ID
+        updatedLikes = storedLikes.filter((itemId) => itemId !== id);
+        likedNow = false;
+      } else {
+        // Si no está, agregar el ID
+        updatedLikes = [...storedLikes, id];
+        likedNow = true;
+      }
+
+      // ACTUALIZAR ESTADO VISUAL INMEDIATAMENTE
+      setIsLiked(likedNow);
+
+      // Obtener cantidad de likes actual
+      const res = await fetch(`http://167.88.36.120:1007/api/airbnbs/${id}`);
+      const data = await res.json();
+      const currentLikes = data.data.likes || 0;
+
+      // Calcular nuevo número de likes
+      newLikes = likedNow ? currentLikes + 1 : Math.max(currentLikes - 1, 0); // evita negativos
+
+      // Actualiza en Strapi
+      await fetch(`http://167.88.36.120:1007/api/airbnbs/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          data: {
+            likes: newLikes,
+          },
+        }),
+      });
+
+      // Guarda en localStorage
+      localStorage.setItem("likedItems", JSON.stringify(updatedLikes));
+    } catch (error) {
+      console.error("Error al alternar el like:", error);
+    }
+  };
+
   return (
     <div className="card-container">
       <div className="image-container">
+        <a className="tag-link font-semibold" href={link} target="_blank">
+          Ir a Airbnb
+        </a>
+
+        <button
+          onClick={() => sendLike(id)}
+          className={`tag-like ${isLiked ? "like-active" : "like-inactive"}`}
+        >
+          <GoHeartFill />
+        </button>
+
         <Swiper
           pagination={{ dynamicBullets: true }}
           modules={[Pagination]}
           className="mySwiper h-full"
         >
           {images.map((item, index) => (
-            <div key={id + index}>
-              <SwiperSlide>
-                <div
-                  className="image"
-                  style={{
-                    backgroundImage: `url("http://167.88.36.120:1007${item}")`,
-                  }}
-                ></div>
-              </SwiperSlide>
-            </div>
+            <SwiperSlide key={index}>
+              <div
+                className="image"
+                style={{
+                  backgroundImage: `url("http://167.88.36.120:1007${item}")`,
+                }}
+              ></div>
+            </SwiperSlide>
           ))}
         </Swiper>
       </div>
       <div className="caption-container tracking-tight">
-        <div className=" font-semibold"> {name}</div>
+        <div className="font-semibold">{name}</div>
         <div className="ellipsis caption">{caption}</div>
         <div className="caption">
-          <span className=" font-semibold underline text-black">${price}</span>{" "}
+          <span className="font-semibold underline text-black">${price}</span>{" "}
           por 3 noches
         </div>
       </div>
