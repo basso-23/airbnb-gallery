@@ -1,5 +1,15 @@
 import "@/styles/globals.css";
+import Head from "next/head";
 
-export default function App({ Component, pageProps }) {
-  return <Component {...pageProps} />;
-}
+const App = ({ Component, pageProps }) => {
+  return (
+    <main className="inter">
+      <Head>
+        <title>Airbnb selection</title>
+      </Head>
+      <Component {...pageProps} />
+    </main>
+  );
+};
+
+export default App;
