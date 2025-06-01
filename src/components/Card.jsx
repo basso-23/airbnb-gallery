@@ -3,10 +3,14 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import { GoHeart } from "react-icons/go";
 import { GoHeartFill } from "react-icons/go";
+import { IoClose } from "react-icons/io5";
+import { IoMdImages } from "react-icons/io";
 
 const Card = ({ name, caption, price, images, link, id }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [likes, setLikes] = useState();
+
+  const [modalIsOpen, setIsOpen] = useState(false);
 
   // Obtener likes guardados en localstorage
   useEffect(() => {
@@ -103,6 +107,10 @@ const Card = ({ name, caption, price, images, link, id }) => {
           <span className="text-[14px]">{likes}</span>
         </button>
 
+        <button onClick={() => setIsOpen(true)} className="show-image">
+          <IoMdImages />
+        </button>
+
         <Swiper
           pagination={{ dynamicBullets: true }}
           modules={[Pagination]}
@@ -128,6 +136,40 @@ const Card = ({ name, caption, price, images, link, id }) => {
           por 3 noches
         </div>
       </div>
+
+      {modalIsOpen && (
+        <div className="modal-container">
+          <button onClick={() => setIsOpen(false)} className="close-modal">
+            <IoClose />
+          </button>
+          <div className="w-full">
+            <Swiper className="mySwiper">
+              {images.map((item, index) => (
+                <SwiperSlide key={index}>
+                  <button
+                    className="image-carrusel aspect-square"
+                    style={{
+                      backgroundImage: `url("http://167.88.36.120:1007${item}")`,
+                    }}
+                  ></button>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+
+            <div className="thumb-container">
+              {images.map((item, index) => (
+                <div
+                  key={index}
+                  className="image-thumb aspect-square"
+                  style={{
+                    backgroundImage: `url("http://167.88.36.120:1007${item}")`,
+                  }}
+                ></div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

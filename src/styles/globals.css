@@ -84,6 +84,23 @@
     rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
 }
 
+.show-image {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: absolute;
+  bottom: 12px;
+  right: 10px;
+  padding: 16px 16px;
+  background-color: white;
+  color: black;
+  border-radius: 9999px;
+  z-index: 10;
+  font-size: 20px;
+  box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px,
+    rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+}
+
 .like-inactive {
   color: #0000005c;
 }
@@ -105,6 +122,14 @@
   background-position: top;
 }
 
+.image-carrusel {
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 .caption-container {
   max-width: 100%;
   padding: 12px 0px;
@@ -123,4 +148,88 @@
 
 .swiper-pagination-bullet-active {
   background-color: #ffffff !important;
+}
+
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.818);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.close-modal {
+  position: absolute;
+  top: 12px;
+  right: 8px;
+  color: white;
+  font-size: 36px;
+}
+
+.thumb-container {
+  display: flex;
+  width: 100%;
+  gap: 10px;
+  overflow: auto;
+}
+
+.image-thumb {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: top;
+  min-width: 100px;
+}
+
+.fixedCenterXnY {
+  top: 50%;
+  left: 51%;
+  transform: translate(-50%, -50%);
+}
+
+.loader {
+  --color: #a5a5b0;
+  --size: 40px;
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+}
+
+.loader span {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1px solid var(--color);
+  border-bottom: 1px solid transparent;
+  border-radius: 100%;
+  animation: keyframes-rotate 0.8s infinite linear;
+}
+
+.loader svg {
+  width: 100%;
+  height: 100%;
+  padding: 25%;
+  fill: var(--color);
+  animation: keyframes-blink 0.8s infinite ease-in-out;
+}
+
+@keyframes keyframes-rotate {
+  0% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes keyframes-blink {
+  50% {
+    opacity: 0.8;
+  }
 }
