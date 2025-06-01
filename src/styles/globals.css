@@ -68,6 +68,7 @@
 }
 
 .tag-like {
+  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -85,6 +86,7 @@
 }
 
 .show-image {
+  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -128,6 +130,7 @@
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
+  cursor: grab;
 }
 
 .caption-container {
@@ -163,6 +166,8 @@
   justify-content: center;
   width: 100%;
   height: 100%;
+  max-width: 430px;
+  margin: auto;
 }
 
 .close-modal {
@@ -171,6 +176,7 @@
   right: 8px;
   color: white;
   font-size: 36px;
+  cursor: pointer;
 }
 
 .thumb-container {

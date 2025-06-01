@@ -143,15 +143,15 @@ const Card = ({ name, caption, price, images, link, id }) => {
             <IoClose />
           </button>
           <div className="w-full">
-            <Swiper className="mySwiper">
+            <Swiper modules={[Pagination]} className="mySwiper">
               {images.map((item, index) => (
                 <SwiperSlide key={index}>
-                  <button
+                  <div
                     className="image-carrusel aspect-square"
                     style={{
                       backgroundImage: `url("http://167.88.36.120:1007${item}")`,
                     }}
-                  ></button>
+                  ></div>
                 </SwiperSlide>
               ))}
             </Swiper>
