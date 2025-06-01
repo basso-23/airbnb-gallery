@@ -56,8 +56,6 @@ const Home = () => {
 
   return (
     <div className="page-size">
-      <div className="header"></div>
-
       {loading && (
         <p className=" text-center pt-16 text-[15px]">Cargando airbnbs...</p>
       )}
@@ -66,13 +64,13 @@ const Home = () => {
         <div className="content-container">
           {airbnbs.map((item, index) => (
             <Card
+              key={item.documentId}
               name={item.name}
               caption={item.caption}
               price={item.price}
               images={item.images}
               link={item.link}
               id={item.documentId}
-              key={item.documentId}
             />
           ))}
         </div>

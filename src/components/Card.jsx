@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
+import { GoHeart } from "react-icons/go";
 import { GoHeartFill } from "react-icons/go";
 
 const Card = ({ name, caption, price, images, link, id }) => {
   const [isLiked, setIsLiked] = useState(false);
+  const [likes, setLikes] = useState();
 
   // Obtener likes guardados en localstorage
   useEffect(() => {
@@ -12,6 +14,19 @@ const Card = ({ name, caption, price, images, link, id }) => {
     setIsLiked(likedItems.includes(id));
   }, [id]);
 
+  // Obtener cantidad de likes actual
+  useEffect(() => {
+    const fetchLikes = async () => {
+      const res = await fetch(`http://167.88.36.120:1007/api/airbnbs/${id}`);
+      const data = await res.json();
+      const currentLikes = data.data.likes || 0;
+      setLikes(currentLikes);
+    };
+
+    fetchLikes();
+  }, []);
+
+  // Enviar likes
   const sendLike = async (id) => {
     try {
       const storedLikes = JSON.parse(localStorage.getItem("likedItems")) || [];
@@ -24,10 +39,12 @@ const Card = ({ name, caption, price, images, link, id }) => {
         // Si ya está en localStorage, restar 1 y quitar el ID
         updatedLikes = storedLikes.filter((itemId) => itemId !== id);
         likedNow = false;
+        setLikes(likes - 1);
       } else {
         // Si no está, agregar el ID
         updatedLikes = [...storedLikes, id];
         likedNow = true;
+        setLikes(likes + 1);
       }
 
       // ACTUALIZAR ESTADO VISUAL INMEDIATAMENTE
@@ -70,9 +87,20 @@ const Card = ({ name, caption, price, images, link, id }) => {
 
         <button
           onClick={() => sendLike(id)}
-          className={`tag-like ${isLiked ? "like-active" : "like-inactive"}`}
+          className={`tag-like font-semibold ${
+            isLiked ? "like-active" : "like-inactive"
+          }`}
         >
-          <GoHeartFill />
+          {isLiked ? (
+            <div>
+              <GoHeartFill />
+            </div>
+          ) : (
+            <div>
+              <GoHeart />
+            </div>
+          )}
+          <span className="text-[14px]">{likes}</span>
         </button>
 
         <Swiper
